@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Color tokens as CSS variables (RGB triplets, so Tailwind's `<alpha-value>`
+ * opacity modifiers keep working — e.g. `border-line/70`). Every component
+ * uses the same semantic classes (bg-paper, text-ink, bg-surface...) in both
+ * themes; only the values here change. This is deliberate: it's the
+ * difference between "dark mode" and "inverted colors" — surfaces get their
+ * own dark values instead of literally flipping black/white.
+ */
+:root {
+  --color-bg: 251 251 253;       /* page background */
+  --color-surface: 255 255 255;  /* cards, popovers, inputs */
+  --color-ink: 29 29 31;         /* primary text */
+  --color-clay: 134 134 139;     /* secondary text */
+  --color-line: 210 210 215;     /* hairlines/borders */
+  --color-accent: 0 113 227;     /* Apple system blue */
+  --color-accent-dark: 0 88 176; /* accent hover/pressed */
+
+  /* Inverted-fill chips (active pill, avatar) — intentionally NOT tied to
+     `ink`/`paper`, since those flip meaning in dark mode and would leave
+     white-on-white text if reused here. */
+  --color-solid: 29 29 31;
+  --color-solid-fg: 255 255 255;
+}
+
+.dark {
+  --color-bg: 0 0 0;
+  --color-surface: 28 28 30;     /* Apple's dark elevated-surface gray */
+  --color-ink: 245 245 247;
+  --color-clay: 152 152 157;
+  --color-line: 56 56 61;
+  --color-accent: 41 151 255;    /* Apple brightens blue slightly for dark mode contrast */
+  --color-accent-dark: 94 176 255;
+
+  --color-solid: 245 245 247;
+  --color-solid-fg: 0 0 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light dark; /* also themes native scrollbars, form controls */
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-ink));
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+::selection {
+  background-color: rgb(var(--color-accent));
+  color: #ffffff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Visible keyboard focus, kept consistent across interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid rgb(var(--color-accent));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
